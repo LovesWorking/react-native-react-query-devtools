@@ -1,0 +1,29 @@
+{
+  "name": "react-query-native-esbuild",
+  "version": "1.0.0",
+  "description": "React Query Dev Tools for React Native",
+  "main": "dist/bundle.cjs.js",
+  "module": "dist/bundle.esm.js",
+  "files": [
+    "dist"
+  ],
+  "types": "dist/types/index.d.ts",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-native": "^0.73.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.56",
+    "esbuild": "^0.20.0",
+    "react": "^18.2.0",
+    "react-native": "^0.73.2"
+  },
+  "dependencies": {
+    "esbuild-node-externals": "^1.13.0",
+    "react-native-svg": "^14.1.0",
+    "typescript": "^5.3.3"
+  }
+}

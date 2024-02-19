@@ -2,6 +2,7 @@
 
 ![rn-dev-tools-hq](https://github.com/LovesWorking/react-query-external-dash/assets/111514077/cba61dd3-bd3f-47a7-9573-1efa088084a0)
 
+  
 ## Introduction
 
 **React Query Dev Tools** The same tool you know and love! Now available for React Native!
@@ -9,6 +10,12 @@
 ## Example 
 - Find a basic example using the lates expo release with this tool here https://github.com/LovesWorking/RN-Dev-Tools-Example
 
+### Prerequisites
+- React version 18.2.0 or above.
+- React Native version 0.73.2 or above.
+- React Query version 5.17.19 or above.
+- react-native-svg 14.1.0 or above.
+  
 ### Installation
 
 To integrate React Query Dev Tools into your React Native project, follow these simple installation steps. Open your terminal, navigate to your project directory, and execute:

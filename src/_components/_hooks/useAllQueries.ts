@@ -1,0 +1,22 @@
+import { useEffect, useState } from "react";
+import { Query, useQueryClient } from "@tanstack/react-query";
+function useAllQueries() {
+  const queryClient = useQueryClient();
+  const [queries, setQueries] = useState<Query[]>([]);
+  useEffect(() => {
+    const updateQueries = () => {
+      const allQueries = queryClient.getQueryCache().findAll();
+      setQueries(allQueries);
+    };
+    // Perform an initial update
+    updateQueries();
+    // Subscribe to the query cache to run updates on changes
+    const unsubscribe = queryClient.getQueryCache().subscribe(updateQueries);
+    // Cleanup the subscription when the component unmounts
+    return () => unsubscribe();
+  }, [queryClient]);
+
+  return queries;
+}
+
+export default useAllQueries;

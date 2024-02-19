@@ -1,2 +1,2 @@
-export { Test } from "./Test";
+export { FloatingBubble } from "./FloatingBubble";
 export { Trash } from "./Trash";

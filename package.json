@@ -11,19 +11,35 @@
   "scripts": {
     "build": "node build.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LovesWorking/react-query-native"
+  },
+  "keywords": [
+    "react-query",
+    "tanstack",
+    "state management",
+    "dev tools",
+    "react native",
+    "QA",
+    "debugging"
+  ],
+  "author": "LovesWorking (https://github.com/LovesWorking)",
   "peerDependencies": {
     "react": "^18.2.0",
+    "react-native-svg": "^14.1.0",
+    "@tanstack/react-query": "^5.17.19",
     "react-native": "^0.73.2"
   },
   "devDependencies": {
+    "esbuild-node-externals": "^1.13.0",
     "@types/react": "^18.2.56",
     "esbuild": "^0.20.0",
     "react": "^18.2.0",
+    "typescript": "^5.3.3",
     "react-native": "^0.73.2"
   },
   "dependencies": {
-    "esbuild-node-externals": "^1.13.0",
-    "react-native-svg": "^14.1.0",
-    "typescript": "^5.3.3"
+    "superjson": "^2.2.1"
   }
 }

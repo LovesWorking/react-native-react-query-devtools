@@ -1,2 +1,1 @@
-export { Test } from "./Test";
-export { Trash } from "./Trash";
+export { DevToolsBubble } from "./DevToolsBubble";

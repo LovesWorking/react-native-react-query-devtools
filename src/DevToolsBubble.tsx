@@ -1,14 +1,8 @@
 import { useState } from "react";
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  Platform,
-  StyleSheet,
-} from "react-native";
+import { View, TouchableOpacity, Platform, StyleSheet } from "react-native";
 import DevTools from "./DevTools";
 import { TanstackLogo } from "./_components/devtools/svgs";
-export function FloatingBubble() {
+export function DevToolsBubble() {
   const [showDevTools, setShowDevTools] = useState(false);
   return (
     <View>
@@ -29,7 +23,6 @@ export function FloatingBubble() {
           ]}
         >
           <TanstackLogo />
-          <Text style={styles.text}></Text>
         </TouchableOpacity>
       )}
     </View>
@@ -48,22 +41,22 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 1,
     zIndex: 50,
-    width: 48, // w-12
-    height: 48, // h-12
-    borderRadius: 24, // rounded-full
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     borderWidth: 4,
     borderColor: "#A4C200",
   },
   touchableOpacityIOS: {
-    bottom: 96, // bottom-24
+    bottom: 96,
   },
   touchableOpacityAndroid: {
-    bottom: 64, // bottom-16
+    bottom: 64,
   },
   text: {
     zIndex: 10,
     color: "white",
-    fontSize: 40, // text-5xl
-    padding: 24, // p-6
+    fontSize: 40,
+    padding: 24,
   },
 });

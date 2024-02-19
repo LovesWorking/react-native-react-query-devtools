@@ -11,6 +11,20 @@
   "scripts": {
     "build": "node build.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LovesWorking/react-query-native"
+  },
+  "keywords": [
+    "react-query",
+    "tanstack",
+    "state management",
+    "dev tools",
+    "react native",
+    "QA",
+    "debugging"
+  ],
+  "author": "LovesWorking (https://github.com/LovesWorking)",
   "peerDependencies": {
     "react": "^18.2.0",
     "react-native-svg": "^14.1.0",

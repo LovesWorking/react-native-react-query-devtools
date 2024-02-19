@@ -6,6 +6,9 @@
 
 **React Query Dev Tools** The same tool you know and love! Now available for React Native!
 
+## Example 
+- Find a basic example using the lates expo release with this tool here https://github.com/LovesWorking/RN-Dev-Tools-Example
+
 ### Installation
 
 To integrate React Query Dev Tools into your React Native project, follow these simple installation steps. Open your terminal, navigate to your project directory, and execute:

@@ -27,18 +27,20 @@ import DevToolsBubble from 'react-native-react-query-devtools';
 Next, integrate the DevToolsBubble component into your app. A common practice is to render it at the root of your layout to ensure it's accessible throughout your app. However, you have the flexibility to place it wherever.
   
 ```javascript
-import React from 'react';
-import { View } from 'react-native';
-import DevToolsBubble from 'react-native-react-query-devtools';
+function RootLayoutNav() {
+  const colorScheme = useColorScheme();
+  const queryClient = new QueryClient();
 
-const App = () => {
   return (
-    <View style={{ flex: 1 }}>
-      {/* Other components */}
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+        </Stack>
+      </ThemeProvider>
       <DevToolsBubble />
-    </View>
+    </QueryClientProvider>
   );
-};
-
-export default App;
+}
 ```

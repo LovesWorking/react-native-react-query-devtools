@@ -1,5 +1,5 @@
 {
-  "name": "react-query-native-esbuild",
+  "name": "react-native-react-query-devtools",
   "version": "1.0.0",
   "description": "React Query Dev Tools for React Native",
   "main": "dist/bundle.cjs.js",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/LovesWorking/react-query-native"
+    "url": "https://github.com/LovesWorking/react-native-react-query-devtools"
   },
   "keywords": [
     "react-query",
@@ -37,6 +37,8 @@
     "esbuild": "^0.20.0",
     "react": "^18.2.0",
     "typescript": "^5.3.3",
+    "@tanstack/react-query": "^5.17.19",
+    "react-native-svg": "^14.1.0",
     "react-native": "^0.73.2"
   },
   "dependencies": {

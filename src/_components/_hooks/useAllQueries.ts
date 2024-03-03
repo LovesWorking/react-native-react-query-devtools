@@ -6,7 +6,9 @@ function useAllQueries() {
   useEffect(() => {
     const updateQueries = () => {
       const allQueries = queryClient.getQueryCache().findAll();
-      setQueries(allQueries);
+      setTimeout(() => {
+        setQueries(allQueries);
+      }, 1);
     };
     // Perform an initial update
     updateQueries();

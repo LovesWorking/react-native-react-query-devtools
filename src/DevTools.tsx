@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import QueriesList from "./_components/devtools/QueriesList";
 import Svg, { Path } from "react-native-svg";
+import MutationsList from "./_components/devtools/MutationsList";
 
 interface Props {
   setShowDevTools: React.Dispatch<React.SetStateAction<boolean>>;
@@ -89,11 +90,7 @@ export default function DevTools({ setShowDevTools }: Props) {
             </TouchableOpacity>
           </View>
         </View>
-        {showQueries ? (
-          <QueriesList />
-        ) : (
-          <Text style={styles.comingSoonText}>Coming soon...</Text>
-        )}
+        {showQueries ? <QueriesList /> : <MutationsList />}
       </View>
     </View>
   );

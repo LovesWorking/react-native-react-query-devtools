@@ -264,7 +264,7 @@ export function CheckCircle() {
     <Svg width="14" height="14" viewBox="0 0 24 24" fill="none">
       <Path
         d="M7.5 12L10.5 15L16.5 9M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-        stroke="#667085"
+        stroke="#027A48"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -278,19 +278,10 @@ export function LoadingCircle() {
     <Svg width="14" height="14" viewBox="0 0 24 24" fill="none">
       <Path
         d="M12 2V6M12 18V22M6 12H2M22 12H18M19.0784 19.0784L16.25 16.25M19.0784 4.99994L16.25 7.82837M4.92157 19.0784L7.75 16.25M4.92157 4.99994L7.75 7.82837"
-        stroke="#667085"
+        stroke="#B54708"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-      />
-      <animateTransform
-        attributeName="transform"
-        attributeType="XML"
-        type="rotate"
-        from="0"
-        to="360"
-        dur="2s"
-        repeatCount="indefinite"
       />
     </Svg>
   );
@@ -301,7 +292,7 @@ export function XCircle() {
     <Svg width="14" height="14" viewBox="0 0 24 24" fill="none">
       <Path
         d="M15 9L9 15M9 9L15 15M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-        stroke="#667085"
+        stroke="#b91c1c"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -315,7 +306,7 @@ export function PauseCircle() {
     <Svg width="14" height="14" viewBox="0 0 24 24" fill="none">
       <Path
         d="M9.5 15V9M14.5 15V9M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-        stroke="#667085"
+        stroke="#5925DC"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -328,7 +319,9 @@ export function TanstackLogo() {
     <Svg
       height="100%"
       width="100%"
-      className="absolute inset-0 "
+      style={{
+        position: "absolute",
+      }}
       viewBox="0 0 633 633"
     >
       <LinearGradient

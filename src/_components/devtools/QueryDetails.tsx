@@ -2,6 +2,7 @@ import { Query, QueryKey } from "@tanstack/react-query";
 import React from "react";
 import QueryDetailsChip from "./QueryDetailsChip";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
+import { displayValue } from "./displayValue";
 
 interface Props {
   query: Query<unknown, Error, unknown, QueryKey> | undefined;
@@ -18,7 +19,9 @@ export default function QueryDetails({ query }: Props) {
       <Text style={styles.headerText}>Query Details</Text>
       <View style={styles.row}>
         <ScrollView horizontal style={styles.flexOne}>
-          <Text style={styles.queryKeyText}>{`[ "${query.queryKey}" ]`}</Text>
+          <Text style={styles.queryKeyText}>
+            {displayValue(query.queryKey, true)}
+          </Text>
         </ScrollView>
         <QueryDetailsChip query={query} />
       </View>

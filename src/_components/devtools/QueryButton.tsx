@@ -4,6 +4,7 @@ import { Query } from "@tanstack/react-query";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 
 import React from "react";
+import { displayValue } from "./displayValue";
 interface Props {
   query: Query;
   setSelected: React.Dispatch<React.SetStateAction<Query | undefined>>;
@@ -29,7 +30,10 @@ export default function QueryButton({ query, setSelected, selected }: Props) {
       >
         {`${query.getObserversCount()}`}
       </Text>
-      <Text style={styles.queryKeyText}>{`["${query.queryKey}"]`}</Text>
+      <Text style={styles.queryKeyText}>{`${displayValue(
+        query.queryKey,
+        false
+      )}`}</Text>
       {query.isDisabled() && <Text style={styles.disabledText}>disabled</Text>}
     </TouchableOpacity>
   );
@@ -51,7 +55,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     minWidth: 30,
     maxWidth: 30,
-    paddingVertical: 4,
+    paddingVertical: 6,
     fontSize: 12,
   },
   queryKeyText: {
@@ -64,7 +68,7 @@ const styles = StyleSheet.create({
   },
   disabledText: {
     fontSize: 12,
-    paddingVertical: 4,
+    paddingVertical: 6,
     paddingHorizontal: 2,
     color: "#1d2939",
     backgroundColor: "#d0d5dd",

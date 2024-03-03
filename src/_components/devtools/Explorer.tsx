@@ -40,11 +40,7 @@ function chunkArray<T extends { label: string; value: unknown }>(
 }
 const Expander = ({ expanded }: { expanded: boolean }) => {
   return (
-    <View
-      className={`inline-block transform ${
-        expanded ? "rotate-90" : "rotate-0"
-      }`}
-    >
+    <View style={[expanded ? styles.expanded : styles.collapsed]}>
       <Svg width={16} height={16} viewBox="0 0 16 16" fill="#98A2B3">
         <Path d="M6 12l4-4-4-4" />
       </Svg>
@@ -71,7 +67,7 @@ const CopyButton = ({ value }: { value: any }) => {
 
   return (
     <TouchableOpacity
-      className="bg-transparent text-gray-500 border-none flex-row p-0 items-center justify-center cursor-pointer w-3 h-3 relative z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-800 focus-visible:ring-offset-2 hover:text-gray-600"
+      style={styles.buttonStyle}
       aria-label={
         copyState === "NoCopy"
           ? "Copy object to clipboard"
@@ -105,7 +101,7 @@ const DeleteItemButton = ({
           dataPath,
         });
       }}
-      className="bg-transparent text-gray-500 border-none p-0 items-center justify-center w-6 h-6 relative z-10 focus:outline-none hover:text-gray-600"
+      style={styles.buttonStyle1}
       accessibilityLabel="Delete item"
     >
       <Trash />
@@ -130,7 +126,7 @@ const ClearArrayButton = ({
 
   return (
     <TouchableOpacity
-      className="bg-transparent text-gray-500 border-none flex-row p-0 items-center justify-center cursor-pointer w-3 h-3 relative z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-800 focus-visible:ring-offset-2 hover:text-gray-600"
+      style={styles.buttonStyle2}
       aria-label="Remove all items"
       onPress={handleClear}
     >
@@ -158,11 +154,7 @@ const ToggleValueButton = ({
 
   return (
     <TouchableOpacity
-      className={`
-    bg-transparent text-[#667085] border-none flex-row items-center justify-center cursor-pointer 
-    w-4 h-4 relative z-10 hover:text-gray-600 focus:outline-none focus-visible:ring-2 
-    focus-visible:ring-blue-800 focus-visible:ring-offset-2
-  `}
+      style={styles.buttonStyle3}
       aria-label="Toggle value"
       onPress={handleClick}
     >
@@ -268,9 +260,6 @@ export default function Explorer({
     queryClient.setQueryData(activeQuery.queryKey, newData);
   };
 
-  if (activeQuery === undefined) {
-    return null;
-  }
   return (
     <View style={styles.minWidthWrapper}>
       <View style={styles.fullWidthMarginRight}>
@@ -492,6 +481,55 @@ export default function Explorer({
   );
 }
 const styles = StyleSheet.create({
+  buttonStyle3: {
+    backgroundColor: "transparent",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 16,
+    height: 16,
+    position: "relative",
+    zIndex: 10,
+  },
+  buttonStyle2: {
+    backgroundColor: "transparent",
+    flexDirection: "row",
+    padding: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    width: 12,
+    height: 12,
+    position: "relative",
+    zIndex: 10,
+  },
+  buttonStyle1: {
+    backgroundColor: "transparent",
+    borderColor: "none",
+    borderWidth: 0,
+    padding: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    width: 24,
+    height: 24,
+    position: "relative",
+  },
+  buttonStyle: {
+    backgroundColor: "transparent",
+    color: "#6B7280",
+    borderWidth: 0,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 12,
+    height: 12,
+    position: "relative",
+  },
+  expanded: {
+    transform: [{ rotate: "90deg" }],
+  },
+  collapsed: {
+    transform: [{ rotate: "0deg" }],
+  },
   minWidthWrapper: {
     minWidth: 200,
     fontSize: 12,

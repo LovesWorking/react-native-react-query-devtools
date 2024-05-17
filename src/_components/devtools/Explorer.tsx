@@ -12,6 +12,7 @@ import {
   View,
   StyleSheet,
 } from "react-native";
+import * as Clipboard from "expo-clipboard";
 
 function isIterable(x: any): x is Iterable<unknown> {
   return Symbol.iterator in x;
@@ -51,18 +52,17 @@ type CopyState = "NoCopy" | "SuccessCopy" | "ErrorCopy";
 const CopyButton = ({ value }: { value: any }) => {
   const [copyState, setCopyState] = useState<CopyState>("NoCopy");
 
-  const handleCopy = () => {
-    navigator.clipboard
-      .writeText(JSON.stringify(value))
-      .then(() => {
+  const handleCopy = async () => {
+    await Clipboard.setStringAsync(JSON.stringify(value)).then((copied) => {
+      if (copied) {
         setCopyState("SuccessCopy");
         setTimeout(() => setCopyState("NoCopy"), 1500);
-      })
-      .catch((err) => {
-        console.error("Failed to copy: ", err);
+      } else {
+        console.error("Failed to copy: ");
         setCopyState("ErrorCopy");
         setTimeout(() => setCopyState("NoCopy"), 1500);
-      });
+      }
+    });
   };
 
   return (

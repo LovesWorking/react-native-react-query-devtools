@@ -2,6 +2,7 @@
 
 ![rn-dev-tools-hq](https://github.com/LovesWorking/react-query-external-dash/assets/111514077/cba61dd3-bd3f-47a7-9573-1efa088084a0)
 
+  # Please use version 1.1.1 with expo or if using react-native-cli please use 1.1.0.
   
 ## Introduction
 

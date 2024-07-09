@@ -28,7 +28,7 @@
   "peerDependencies": {
     "@tanstack/react-query": "^5.17.19",
     "react": "^18.2.0",
-    "react-native": "^0.73.2",
+    "react-native": "^0.74.3",
     "react-native-svg": "^14.1.0"
   },
   "devDependencies": {
@@ -37,7 +37,7 @@
     "esbuild": "^0.20.0",
     "esbuild-node-externals": "^1.13.0",
     "react": "^18.2.0",
-    "react-native": "^0.73.2",
+    "react-native": "*",
     "react-native-svg": "^14.1.0",
     "typescript": "^5.3.3"
   },

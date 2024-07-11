@@ -11,9 +11,9 @@
 
 ### Prerequisites
 - React version 18.2.0 or above.
-- React Native version 0.73.2 or above.
+- React Native version 0.74.0 or above.
 - React Query version 5.17.19 or above.
-- react-native-svg 14.1.0 or above.
+- react-native-svg 15.0.0 or above.
   
 ### Installation
 

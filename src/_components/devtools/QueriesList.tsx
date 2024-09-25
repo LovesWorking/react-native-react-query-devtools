@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Query } from "@tanstack/react-query";
 import QueryButton from "./QueryButton";
-import { ScrollView, View, StyleSheet } from "react-native";
+import { ScrollView, View, StyleSheet, SafeAreaView } from "react-native";
 import useAllQueries from "../_hooks/useAllQueries";
 import QueryInformation from "./QueryInformation";
 export default function QueriesList() {
@@ -9,7 +9,7 @@ export default function QueriesList() {
   // Holds all queries
   const allQueries = useAllQueries();
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
         {allQueries.map((query, index) => (
           <QueryButton
@@ -28,7 +28,7 @@ export default function QueriesList() {
           />
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({

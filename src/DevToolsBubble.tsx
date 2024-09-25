@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { View, TouchableOpacity, Platform, StyleSheet } from "react-native";
+import { View, TouchableOpacity, Platform, StyleSheet, ViewStyle, StyleProp } from "react-native";
 import DevTools from "./DevTools";
 import { TanstackLogo } from "./_components/devtools/svgs";
-export function DevToolsBubble() {
+export function DevToolsBubble({ bubbleStyle }: { bubbleStyle?: StyleProp<ViewStyle> }) {
   const [showDevTools, setShowDevTools] = useState(false);
   return (
     <View>
@@ -20,6 +20,7 @@ export function DevToolsBubble() {
             Platform.OS === "ios"
               ? styles.touchableOpacityIOS
               : styles.touchableOpacityAndroid,
+            bubbleStyle,
           ]}
         >
           <TanstackLogo />

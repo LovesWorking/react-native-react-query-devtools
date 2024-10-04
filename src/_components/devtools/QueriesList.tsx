@@ -1,23 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Query } from "@tanstack/react-query";
+import { ScrollView, View, StyleSheet, SafeAreaView, LayoutChangeEvent } from "react-native";
 import QueryButton from "./QueryButton";
-import { ScrollView, View, StyleSheet } from "react-native";
 import useAllQueries from "../_hooks/useAllQueries";
 import QueryInformation from "./QueryInformation";
 export default function QueriesList() {
-  const [selectedQuery, setSelectedQuery] = useState<Query>();
+  const [selectedQuery, setSelectedQuery] = useState<Query | undefined>(undefined);
+  const [itemPositions, setItemPositions] = useState<{ [key: number]: { y: number, height: number } }>({});
   // Holds all queries
   const allQueries = useAllQueries();
+  const scrollViewRef = useRef<ScrollView>(null);
+  // Function to handle layout and capture each item's position
+  const handleItemLayout = (event: LayoutChangeEvent, index: number) => {
+    const { y, height } = event.nativeEvent.layout;
+    setItemPositions(prevPositions => ({
+      ...prevPositions,
+      [index]: { y, height }
+    }));
+  };
+  // Function to scroll to the selected query
+  const handleQuerySelect = (query: Query, index: number) => {
+    // If deselecting (i.e., clicking the same query), just update the state without scrolling
+    if (query === selectedQuery) {
+      setSelectedQuery(undefined);
+      return;
+    }
+    setSelectedQuery(query); // Update the selected query
+    // Scroll the ScrollView to the selected item's position
+    if (scrollViewRef.current && itemPositions[index]) {
+      const itemY = itemPositions[index].y;
+      scrollViewRef.current.scrollTo({
+        y: itemY,
+        animated: true,
+      });
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <ScrollView style={styles.scrollView}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView} ref={scrollViewRef}>
         {allQueries.map((query, index) => (
-          <QueryButton
-            selected={selectedQuery}
-            setSelected={setSelectedQuery}
-            query={query}
-            key={index}
-          />
+          <View key={index} onLayout={(event) => handleItemLayout(event, index)}>
+            <QueryButton
+              selected={selectedQuery}
+              setSelected={() => handleQuerySelect(query, index)}
+              query={query}
+            />
+          </View>
         ))}
       </ScrollView>
       {selectedQuery && (
@@ -28,7 +57,7 @@ export default function QueriesList() {
           />
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({

@@ -1,12 +1,21 @@
-import { serialize } from "superjson";
-
 /**
  * Displays a string regardless the type of the data
  * @param {unknown} value Value to be stringified
  * @param {boolean} beautify Formats json to multiline
  */
 export const displayValue = (value: unknown, beautify: boolean = false) => {
-  const { json } = serialize(value);
+  const getCircularReplacer = () => {
+    const seen = new WeakSet();
+    return (key: string, value: any) => {
+      if (typeof value === "object" && value !== null) {
+        if (seen.has(value)) {
+          return "[Circular]";
+        }
+        seen.add(value);
+      }
+      return value;
+    };
+  };
 
-  return JSON.stringify(json, null, beautify ? 2 : undefined);
+  return JSON.stringify(value, getCircularReplacer(), beautify ? 2 : undefined);
 };

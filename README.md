@@ -11,8 +11,7 @@
 - Find a basic example using the lates expo release with this tool here https://github.com/LovesWorking/RN-Dev-Tools-Example
 
 ### Prerequisites
-- React version 18.2.0 or above.
-- React Native version 0.74.0 or above.
+- React native version 0.63.0 or above.
 - React Query version 5.17.19 or above.
 - react-native-svg 15.0.0 or above.
   

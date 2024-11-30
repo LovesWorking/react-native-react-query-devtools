@@ -74,7 +74,11 @@ const CopyButton = ({ value }: { value: any }) => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Copy Text</Text>
-            <Text selectable={true} style={styles.modalText}>
+            <Text
+              selectable={true}
+              textBreakStrategy="simple"
+              style={[styles.modalText, styles.selectableText]}
+            >
               {JSON.stringify(value, null, 2)}
             </Text>
             <TouchableOpacity
@@ -693,5 +697,11 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: "white",
     fontSize: 16,
+  },
+  selectableText: {
+    userSelect: "text",
+    padding: 8,
+    backgroundColor: "#F9FAFB",
+    borderRadius: 4,
   },
 });

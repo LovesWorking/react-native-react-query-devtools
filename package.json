@@ -1,6 +1,6 @@
 {
   "name": "react-native-react-query-devtools",
-  "version": "1.3.6",
+  "version": "1.3.7",
   "description": "React Query Dev Tools for React Native",
   "main": "dist/bundle.cjs.js",
   "module": "dist/bundle.esm.js",

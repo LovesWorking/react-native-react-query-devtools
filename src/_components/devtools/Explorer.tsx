@@ -12,7 +12,7 @@ import {
   View,
   StyleSheet,
 } from "react-native";
-import Clipboard from "@react-native-clipboard/clipboard";
+import { clipboard } from "../_util/clipboard";
 
 function isIterable(x: any): x is Iterable<unknown> {
   return Symbol.iterator in x;
@@ -54,7 +54,7 @@ const CopyButton = ({ value }: { value: any }) => {
 
   const handleCopy = async () => {
     try {
-      Clipboard.setString(JSON.stringify(value));
+      clipboard.setString(JSON.stringify(value));
       setCopyState("SuccessCopy");
       setTimeout(() => setCopyState("NoCopy"), 1500);
     } catch (error) {

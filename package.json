@@ -42,7 +42,6 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@react-native-clipboard/clipboard": "^1.15.0",
     "fast-deep-equal": "^3.1.3"
   }
 }

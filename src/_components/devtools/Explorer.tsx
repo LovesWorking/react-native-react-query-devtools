@@ -11,8 +11,8 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
+  Modal,
 } from "react-native";
-import { clipboard } from "../_util/clipboard";
 
 function isIterable(x: any): x is Iterable<unknown> {
   return Symbol.iterator in x;
@@ -48,38 +48,45 @@ const Expander = ({ expanded }: { expanded: boolean }) => {
     </View>
   );
 };
-type CopyState = "NoCopy" | "SuccessCopy" | "ErrorCopy";
 const CopyButton = ({ value }: { value: any }) => {
-  const [copyState, setCopyState] = useState<CopyState>("NoCopy");
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const handleCopy = async () => {
-    try {
-      clipboard.setString(JSON.stringify(value));
-      setCopyState("SuccessCopy");
-      setTimeout(() => setCopyState("NoCopy"), 1500);
-    } catch (error) {
-      console.error("Failed to copy: ");
-      setCopyState("ErrorCopy");
-      setTimeout(() => setCopyState("NoCopy"), 1500);
-    }
+  const handlePress = () => {
+    setIsModalVisible(true);
   };
 
   return (
-    <TouchableOpacity
-      style={styles.buttonStyle}
-      aria-label={
-        copyState === "NoCopy"
-          ? "Copy object to clipboard"
-          : copyState === "SuccessCopy"
-          ? "Object copied to clipboard"
-          : "Error copying object to clipboard"
-      }
-      onPress={copyState === "NoCopy" ? handleCopy : undefined}
-    >
-      {copyState === "NoCopy" && <Copier />}
-      {copyState === "SuccessCopy" && <CopiedCopier theme="light" />}
-      {copyState === "ErrorCopy" && <ErrorCopier />}
-    </TouchableOpacity>
+    <>
+      <TouchableOpacity
+        style={styles.buttonStyle}
+        aria-label="Show copyable text"
+        onPress={handlePress}
+      >
+        <Copier />
+      </TouchableOpacity>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={() => setIsModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Copy Text</Text>
+            <Text selectable={true} style={styles.modalText}>
+              {JSON.stringify(value, null, 2)}
+            </Text>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setIsModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </>
   );
 };
 const DeleteItemButton = ({
@@ -627,6 +634,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   textString: {},
+
   numberInputButtons: {
     flexDirection: "row",
   },
@@ -649,5 +657,41 @@ const styles = StyleSheet.create({
     flex: 1,
     color: "#6938EF",
     height: "100%",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  modalContent: {
+    backgroundColor: "white",
+    borderRadius: 8,
+    padding: 20,
+    maxWidth: "90%",
+    maxHeight: "80%",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#344054",
+  },
+  modalText: {
+    fontSize: 14,
+    color: "#344054",
+    fontFamily: "monospace",
+  },
+  closeButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: "#6938EF",
+    borderRadius: 4,
+    alignItems: "center",
+  },
+  closeButtonText: {
+    color: "white",
+    fontSize: 16,
   },
 });

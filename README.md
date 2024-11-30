@@ -23,9 +23,6 @@ Check out our [example project](https://github.com/LovesWorking/RN-Dev-Tools-Exa
 - React Native version 0.63.0 or above
 - React Query version 5.17.19 or above
 - react-native-svg 15.0.0 or above
-- One of the following clipboard packages:
-  - `expo-clipboard` (for Expo projects)
-  - `@react-native-clipboard/clipboard` (for React Native CLI projects)
 
 ### Installation
 

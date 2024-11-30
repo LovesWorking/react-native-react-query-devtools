@@ -23,6 +23,9 @@ Check out our [example project](https://github.com/LovesWorking/RN-Dev-Tools-Exa
 - React Native version 0.63.0 or above
 - React Query version 5.17.19 or above
 - react-native-svg 15.0.0 or above
+- One of the following clipboard packages:
+  - `expo-clipboard` (for Expo projects)
+  - `@react-native-clipboard/clipboard` (for React Native CLI projects)
 
 ### Installation
 
@@ -30,9 +33,26 @@ Check out our [example project](https://github.com/LovesWorking/RN-Dev-Tools-Exa
 # npm
 npm install react-native-react-query-devtools
 
-# yarn
-yarn add react-native-react-query-devtools
+# For Expo projects, also install:
+npx expo install expo-clipboard
+
+# For React Native CLI projects, also install:
+npm install @react-native-clipboard/clipboard
 ```
+
+# yarn
+
+yarn add react-native-react-query-devtools
+
+# For Expo projects, also install:
+
+yarn add expo-clipboard
+
+# For React Native CLI projects, also install:
+
+yarn add @react-native-clipboard/clipboard
+
+````
 
 ## Usage
 
@@ -40,7 +60,7 @@ yarn add react-native-react-query-devtools
 
 ```javascript
 import { DevToolsBubble } from "react-native-react-query-devtools";
-```
+````
 
 2. Add it to your app's root component:
 

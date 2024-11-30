@@ -1,37 +1,49 @@
 # React Query Dev Tools (React Native)
 
-  # Please use the latest version with expo or if using react-native-cli please use 1.1.0.
-  ![rn-dev-tools-hq](https://github.com/LovesWorking/LovesWorking/assets/111514077/3c6a2d9f-1320-48cc-92f3-affe02f877ea)
+![rn-dev-tools-hq](https://github.com/LovesWorking/LovesWorking/assets/111514077/3c6a2d9f-1320-48cc-92f3-affe02f877ea)
 
 ## Introduction
 
-**React Query Dev Tools** The same tool you know and love! Now available for React Native!
+**React Query Dev Tools** The same tool you know and love! Now available for React Native! A lightweight, easy-to-use development toolset for debugging and inspecting React Query states in your React Native applications. Works seamlessly with both Expo and React Native CLI projects.
 
-## Example 
-- Find a basic example using the lates expo release with this tool here https://github.com/LovesWorking/RN-Dev-Tools-Example
+## Features
+
+- 🔍 Real-time query inspection
+- 📱 Native mobile-friendly interface
+- 🚀 Zero configuration required
+- ⚡️ Zero impact on your app's performance
+- 💻 Works with both Expo and React Native CLI
+
+## Example
+
+Check out our [example project](https://github.com/LovesWorking/RN-Dev-Tools-Example) to see the Dev Tools in action.
 
 ### Prerequisites
-- React native version 0.63.0 or above.
-- React Query version 5.17.19 or above.
-- react-native-svg 15.0.0 or above.
-  
+
+- React Native version 0.63.0 or above
+- React Query version 5.17.19 or above
+- react-native-svg 15.0.0 or above
+
 ### Installation
 
-To integrate React Query Dev Tools into your React Native project, follow these simple installation steps. Open your terminal, navigate to your project directory, and execute:
-
 ```bash
+# npm
 npm install react-native-react-query-devtools
+
+# yarn
+yarn add react-native-react-query-devtools
 ```
-This command adds the react-native-react-query-devtools package to your project dependencies, making the Dev Tools available for use.
 
 ## Usage
-Incorporating React Query Dev Tools into your application is straightforward. Begin by importing the DevToolsBubble component.
+
+1. Import the DevToolsBubble component:
+
 ```javascript
-import { DevToolsBubble } from 'react-native-react-query-devtools';
+import { DevToolsBubble } from "react-native-react-query-devtools";
 ```
 
-Next, integrate the DevToolsBubble component into your app. A common practice is to render it at the root of your layout to ensure it's accessible throughout your app. However, you have the flexibility to place it wherever.
-  
+2. Add it to your app's root component:
+
 ```javascript
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
@@ -50,3 +62,26 @@ function RootLayoutNav() {
   );
 }
 ```
+
+## Props
+
+| Prop          | Type                                                         | Default        | Description                                  |
+| ------------- | ------------------------------------------------------------ | -------------- | -------------------------------------------- |
+| initialIsOpen | boolean                                                      | false          | Whether the DevTools should be open on mount |
+| position      | 'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right' | 'bottom-right' | Position of the DevTools bubble              |
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+MIT
+
+## Support
+
+If you're having issues or have questions, please [file an issue](https://github.com/YourUsername/react-native-react-query-devtools/issues).
+
+## Acknowledgments
+
+- Thanks to the [TanStack Query](https://tanstack.com/query/latest) team for the original React Query DevTools

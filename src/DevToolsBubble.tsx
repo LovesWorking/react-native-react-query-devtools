@@ -1,34 +1,52 @@
 import { useState } from "react";
-import { View, TouchableOpacity, Platform, StyleSheet, ViewStyle, StyleProp } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Platform,
+  StyleSheet,
+  ViewStyle,
+  StyleProp,
+} from "react-native";
 import DevTools from "./DevTools";
 import { TanstackLogo } from "./_components/devtools/svgs";
-export function DevToolsBubble({ bubbleStyle }: { bubbleStyle?: StyleProp<ViewStyle> }) {
+import { ClipboardFunction, CopyContext } from "./context/CopyContext";
+
+interface DevToolsBubbleProps {
+  bubbleStyle?: StyleProp<ViewStyle>;
+  onCopy?: ClipboardFunction;
+}
+
+export function DevToolsBubble({ bubbleStyle, onCopy }: DevToolsBubbleProps) {
   const [showDevTools, setShowDevTools] = useState(false);
+
   return (
-    <View>
-      {showDevTools ? (
-        <View style={styles.devTools}>
-          <DevTools setShowDevTools={setShowDevTools} />
-        </View>
-      ) : (
-        <TouchableOpacity
-          onPress={() => {
-            setShowDevTools(true);
-          }}
-          style={[
-            styles.touchableOpacityBase,
-            Platform.OS === "ios"
-              ? styles.touchableOpacityIOS
-              : styles.touchableOpacityAndroid,
-            bubbleStyle,
-          ]}
-        >
-          <TanstackLogo />
-        </TouchableOpacity>
-      )}
-    </View>
+    <CopyContext.Provider value={{ onCopy }}>
+      <View>
+        {showDevTools ? (
+          <View style={styles.devTools}>
+            <DevTools setShowDevTools={setShowDevTools} />
+          </View>
+        ) : (
+          <TouchableOpacity
+            onPress={() => {
+              setShowDevTools(true);
+            }}
+            style={[
+              styles.touchableOpacityBase,
+              Platform.OS === "ios"
+                ? styles.touchableOpacityIOS
+                : styles.touchableOpacityAndroid,
+              bubbleStyle,
+            ]}
+          >
+            <TanstackLogo />
+          </TouchableOpacity>
+        )}
+      </View>
+    </CopyContext.Provider>
   );
 }
+
 const styles = StyleSheet.create({
   devTools: {
     position: "absolute",

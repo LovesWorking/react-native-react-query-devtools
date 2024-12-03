@@ -11,8 +11,9 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
+  Alert,
 } from "react-native";
-import * as Clipboard from "expo-clipboard";
+import { useCopy } from "../../context/CopyContext";
 
 function isIterable(x: any): x is Iterable<unknown> {
   return Symbol.iterator in x;
@@ -51,20 +52,32 @@ const Expander = ({ expanded }: { expanded: boolean }) => {
 type CopyState = "NoCopy" | "SuccessCopy" | "ErrorCopy";
 const CopyButton = ({ value }: { value: any }) => {
   const [copyState, setCopyState] = useState<CopyState>("NoCopy");
+  const { onCopy } = useCopy();
 
   const handleCopy = async () => {
-    await Clipboard.setStringAsync(JSON.stringify(value)).then((copied) => {
+    if (!onCopy) {
+      Alert.alert(
+        "Warning",
+        "Copy functionality is not configured. Please add a copy function to DevToolsBubble. See documentation for setup instructions."
+      );
+      return;
+    }
+
+    try {
+      const copied = await onCopy(JSON.stringify(value));
       if (copied) {
         setCopyState("SuccessCopy");
         setTimeout(() => setCopyState("NoCopy"), 1500);
       } else {
-        console.error("Failed to copy: ");
         setCopyState("ErrorCopy");
         setTimeout(() => setCopyState("NoCopy"), 1500);
       }
-    });
+    } catch (error) {
+      console.error("Copy failed:", error);
+      setCopyState("ErrorCopy");
+      setTimeout(() => setCopyState("NoCopy"), 1500);
+    }
   };
-
   return (
     <TouchableOpacity
       style={styles.buttonStyle}

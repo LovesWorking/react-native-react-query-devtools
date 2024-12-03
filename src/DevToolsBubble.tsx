@@ -9,11 +9,11 @@ import {
 } from "react-native";
 import DevTools from "./DevTools";
 import { TanstackLogo } from "./_components/devtools/svgs";
-import { CopyContext } from "./context/CopyContext";
+import { ClipboardFunction, CopyContext } from "./context/CopyContext";
 
 interface DevToolsBubbleProps {
   bubbleStyle?: StyleProp<ViewStyle>;
-  onCopy?: (value: string) => Promise<boolean>;
+  onCopy?: ClipboardFunction;
 }
 
 export function DevToolsBubble({ bubbleStyle, onCopy }: DevToolsBubbleProps) {

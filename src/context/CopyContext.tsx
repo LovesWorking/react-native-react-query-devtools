@@ -1,9 +1,9 @@
 import { createContext, useContext } from "react";
 
-type CopyFunctionType = (value: string) => Promise<boolean>;
+export type ClipboardFunction = (text: string) => Promise<boolean>;
 
 interface CopyContextType {
-  onCopy?: CopyFunctionType;
+  onCopy?: ClipboardFunction;
 }
 
 export const CopyContext = createContext<CopyContextType>({});

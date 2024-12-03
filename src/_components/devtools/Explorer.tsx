@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { useCopy } from "../../context/CopyContext";
 
@@ -51,11 +52,14 @@ const Expander = ({ expanded }: { expanded: boolean }) => {
 type CopyState = "NoCopy" | "SuccessCopy" | "ErrorCopy";
 const CopyButton = ({ value }: { value: any }) => {
   const [copyState, setCopyState] = useState<CopyState>("NoCopy");
+  const { onCopy } = useCopy();
 
   const handleCopy = async () => {
-    const { onCopy } = useCopy();
     if (!onCopy) {
-      console.warn("No copy function provided");
+      Alert.alert(
+        "Warning",
+        "Copy functionality is not configured. Please add a copy function to DevToolsBubble. See documentation for setup instructions."
+      );
       return;
     }
 

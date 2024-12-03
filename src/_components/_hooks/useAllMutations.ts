@@ -8,7 +8,6 @@ function useAllMutations() {
   const mutationsRef = useRef<any[]>([]);
   useEffect(() => {
     const updateMutations = () => {
-      const allMutations = queryClient.getMutationCache().getAll();
       // Only update state if the new mutations array is different
       setTimeout(() => {
         const newMutations = [...queryClient.getMutationCache().getAll()];

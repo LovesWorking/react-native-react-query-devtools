@@ -12,7 +12,7 @@ import {
   View,
   StyleSheet,
 } from "react-native";
-import * as Clipboard from "expo-clipboard";
+import { useCopy } from "../../context/CopyContext";
 
 function isIterable(x: any): x is Iterable<unknown> {
   return Symbol.iterator in x;
@@ -53,18 +53,27 @@ const CopyButton = ({ value }: { value: any }) => {
   const [copyState, setCopyState] = useState<CopyState>("NoCopy");
 
   const handleCopy = async () => {
-    await Clipboard.setStringAsync(JSON.stringify(value)).then((copied) => {
+    const { onCopy } = useCopy();
+    if (!onCopy) {
+      console.warn("No copy function provided");
+      return;
+    }
+
+    try {
+      const copied = await onCopy(JSON.stringify(value));
       if (copied) {
         setCopyState("SuccessCopy");
         setTimeout(() => setCopyState("NoCopy"), 1500);
       } else {
-        console.error("Failed to copy: ");
         setCopyState("ErrorCopy");
         setTimeout(() => setCopyState("NoCopy"), 1500);
       }
-    });
+    } catch (error) {
+      console.error("Copy failed:", error);
+      setCopyState("ErrorCopy");
+      setTimeout(() => setCopyState("NoCopy"), 1500);
+    }
   };
-
   return (
     <TouchableOpacity
       style={styles.buttonStyle}

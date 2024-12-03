@@ -639,6 +639,8 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     marginRight: 8,
+    paddingBottom: 2,
+    paddingTop: 2,
   },
   textString: {},
   numberInputButtons: {

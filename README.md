@@ -1,5 +1,10 @@
 # React Query Dev Tools (React Native)
 
+I would use my new app package which works much better until I have more free time to fix some of the issues in this package.
+
+https://github.com/LovesWorking/rn-better-dev-tools
+
+
 ## Introduction
 
 **React Query Dev Tools** The same tool you know and love! Now available for React Native!

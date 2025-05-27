@@ -10,7 +10,7 @@ import {
   Query,
   Mutation,
   onlineManager,
-  useQueryClient,
+  QueryClient,
 } from "@tanstack/react-query";
 import QueriesList from "./_components/devtools/QueriesList";
 import Svg, { Path } from "react-native-svg";
@@ -21,14 +21,15 @@ interface Props {
   setShowDevTools: React.Dispatch<React.SetStateAction<boolean>>;
   onSelectionChange?: (hasSelection: boolean) => void;
   panResponder?: PanResponderInstance;
+  queryClient: QueryClient;
 }
 
 export default function DevTools({
   setShowDevTools,
   onSelectionChange,
   panResponder,
+  queryClient,
 }: Props) {
-  const queryClient = useQueryClient();
   const [showQueries, setShowQueries] = useState(true);
   const [selectedQuery, setSelectedQuery] = useState<
     Query<any, any, any, any> | undefined

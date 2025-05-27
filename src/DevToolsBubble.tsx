@@ -10,6 +10,7 @@ import {
   PanResponder,
   Animated,
 } from "react-native";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import DevTools from "./DevTools";
 import { TanstackLogo } from "./_components/devtools/svgs";
 import { ClipboardFunction, CopyContext } from "./context/CopyContext";
@@ -17,9 +18,14 @@ import { ClipboardFunction, CopyContext } from "./context/CopyContext";
 interface DevToolsBubbleProps {
   bubbleStyle?: StyleProp<ViewStyle>;
   onCopy?: ClipboardFunction;
+  queryClient: QueryClient;
 }
 
-export function DevToolsBubble({ bubbleStyle, onCopy }: DevToolsBubbleProps) {
+export function DevToolsBubble({
+  bubbleStyle,
+  onCopy,
+  queryClient,
+}: DevToolsBubbleProps) {
   const [showDevTools, setShowDevTools] = useState(false);
   const [hasSelection, setHasSelection] = useState(false);
 
@@ -112,13 +118,16 @@ export function DevToolsBubble({ bubbleStyle, onCopy }: DevToolsBubbleProps) {
     <CopyContext.Provider value={{ onCopy }}>
       <View>
         {showDevTools ? (
-          <Animated.View style={[styles.devTools, { height: heightAnim }]}>
-            <DevTools
-              setShowDevTools={setShowDevTools}
-              onSelectionChange={setHasSelection}
-              panResponder={panResponder}
-            />
-          </Animated.View>
+          <QueryClientProvider client={queryClient}>
+            <Animated.View style={[styles.devTools, { height: heightAnim }]}>
+              <DevTools
+                setShowDevTools={setShowDevTools}
+                onSelectionChange={setHasSelection}
+                panResponder={panResponder}
+                queryClient={queryClient}
+              />
+            </Animated.View>
+          </QueryClientProvider>
         ) : (
           <TouchableOpacity
             onPress={() => {

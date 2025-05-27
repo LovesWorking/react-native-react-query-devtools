@@ -5,13 +5,15 @@ import { CheckCircle, LoadingCircle, PauseCircle, XCircle } from "./svgs";
 import { getMutationStatusColors } from "../_util/mutationStatusToColorClass";
 import { displayValue } from "./displayValue";
 interface Props {
-  mutation: Mutation<unknown, Error, void, unknown>;
-  setSelected: React.Dispatch<React.SetStateAction<Mutation | undefined>>;
-  selected: Mutation | undefined;
+  mutation: Mutation<any, any, any, any>;
+  setSelectedMutation: React.Dispatch<
+    React.SetStateAction<Mutation<any, any, any, any> | undefined>
+  >;
+  selected: Mutation<any, any, any, any> | undefined;
 }
 export default function MutationButton({
   mutation,
-  setSelected,
+  setSelectedMutation,
   selected,
 }: Props) {
   const mutationKey = mutation.options.mutationKey
@@ -26,7 +28,9 @@ export default function MutationButton({
   });
   return (
     <TouchableOpacity
-      onPress={() => setSelected(mutation === selected ? undefined : mutation)}
+      onPress={() =>
+        setSelectedMutation(mutation === selected ? undefined : mutation)
+      }
       style={[
         styles.button,
         selected?.mutationId === mutation.mutationId && styles.selected,

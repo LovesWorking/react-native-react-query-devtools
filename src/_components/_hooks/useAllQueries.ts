@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Query, useQueryClient } from "@tanstack/react-query";
 function useAllQueries() {
   const queryClient = useQueryClient();
-  const [queries, setQueries] = useState<Query[]>([]);
+  const [queries, setQueries] = useState<Query<any, any, any, any>[]>([]);
   useEffect(() => {
     const updateQueries = () => {
       const allQueries = queryClient.getQueryCache().findAll();

@@ -5,7 +5,7 @@ import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { displayValue } from "./displayValue";
 
 interface Props {
-  query: Query<unknown, Error, unknown, QueryKey> | undefined;
+  query: Query<any, any, any, any> | undefined;
 }
 export default function QueryDetails({ query }: Props) {
   if (query === undefined) {
@@ -40,16 +40,21 @@ const styles = StyleSheet.create({
   minWidth: {
     minWidth: 200,
     fontSize: 12,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 4,
   },
   headerText: {
     textAlign: "left",
     backgroundColor: "#EAECF0",
-    padding: 4,
+    padding: 8,
+    fontWeight: "500",
   },
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 4,
+    padding: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F3F4F6",
   },
   flexOne: {
     flex: 1,
@@ -57,5 +62,6 @@ const styles = StyleSheet.create({
   queryKeyText: {
     flexWrap: "wrap",
     alignItems: "center",
+    marginRight: 8,
   },
 });

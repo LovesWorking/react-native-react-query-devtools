@@ -12,9 +12,9 @@ import { View, Text, StyleSheet } from "react-native";
 
 interface Props {
   setSelectedQuery: React.Dispatch<
-    React.SetStateAction<Query<unknown, Error, unknown, QueryKey> | undefined>
+    React.SetStateAction<Query<any, any, any, any> | undefined>
   >;
-  query: Query<unknown, Error, unknown, QueryKey> | undefined;
+  query: Query<any, any, any, any> | undefined;
 }
 export default function QueryActions({ query, setSelectedQuery }: Props) {
   const queryClient = useQueryClient();
@@ -39,7 +39,7 @@ export default function QueryActions({ query, setSelectedQuery }: Props) {
       <ActionButton
         disabled={queryStatus === "pending"}
         onClick={() => {
-          invalidate({ query });
+          invalidate({ query, queryClient });
         }}
         bgColorClass="btnInvalidate"
         text="Invalidate"
@@ -93,11 +93,17 @@ const styles = StyleSheet.create({
     fontSize: 12,
     flexDirection: "row",
     flexWrap: "wrap",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 4,
+    gap: 8,
+    padding: 8,
   },
   headerText: {
     textAlign: "left",
     backgroundColor: "#EAECF0",
-    padding: 4,
+    padding: 8,
     width: "100%",
+    fontWeight: "500",
+    marginBottom: 8,
   },
 });

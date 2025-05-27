@@ -5,7 +5,7 @@ import { displayValue } from "./displayValue";
 import MutationDetailsChips from "./MutationDetailsChips";
 
 interface Props {
-  selectedMutation: Mutation<unknown, Error, void, unknown> | undefined;
+  selectedMutation: Mutation<any, any, any, any> | undefined;
 }
 
 export default function MutationDetails({ selectedMutation }: Props) {
@@ -44,22 +44,27 @@ const styles = StyleSheet.create({
   container: {
     minWidth: 200,
     fontSize: 12,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 4,
   },
   mutationDetailsText: {
     textAlign: "left",
     backgroundColor: "#EAECF0",
-    padding: 4,
+    padding: 8,
+    fontWeight: "500",
   },
   flexRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 4,
+    padding: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F3F4F6",
   },
   justifyBetween: {
     justifyContent: "space-between",
   },
   p1: {
-    padding: 4,
+    padding: 8,
   },
   flex1: {
     flex: 1,
@@ -67,6 +72,7 @@ const styles = StyleSheet.create({
   flexWrap: {
     flexWrap: "wrap",
     alignItems: "center",
+    marginRight: 8,
   },
   bgEAECF0: {
     backgroundColor: "#EAECF0",

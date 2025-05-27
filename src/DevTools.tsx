@@ -1,14 +1,77 @@
 import React, { useState } from "react";
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  PanResponderInstance,
+} from "react-native";
+import {
+  Query,
+  Mutation,
+  onlineManager,
+  useQueryClient,
+} from "@tanstack/react-query";
 import QueriesList from "./_components/devtools/QueriesList";
 import Svg, { Path } from "react-native-svg";
 import MutationsList from "./_components/devtools/MutationsList";
+import DevToolsHeader from "./_components/devtools/DevToolsHeader";
 
 interface Props {
   setShowDevTools: React.Dispatch<React.SetStateAction<boolean>>;
+  onSelectionChange?: (hasSelection: boolean) => void;
+  panResponder?: PanResponderInstance;
 }
-export default function DevTools({ setShowDevTools }: Props) {
+
+export default function DevTools({
+  setShowDevTools,
+  onSelectionChange,
+  panResponder,
+}: Props) {
+  const queryClient = useQueryClient();
   const [showQueries, setShowQueries] = useState(true);
+  const [selectedQuery, setSelectedQuery] = useState<
+    Query<any, any, any, any> | undefined
+  >(undefined);
+  const [selectedMutation, setSelectedMutation] = useState<
+    Mutation<any, any, any, any> | undefined
+  >(undefined);
+  const [isOffline, setIsOffline] = useState(!onlineManager.isOnline());
+
+  // Clear selections when switching tabs
+  const handleTabChange = (newShowQueries: boolean) => {
+    if (newShowQueries !== showQueries) {
+      setSelectedQuery(undefined);
+      setSelectedMutation(undefined);
+    }
+    setShowQueries(newShowQueries);
+  };
+
+  // Handle network toggle
+  const handleToggleNetwork = () => {
+    const newOfflineState = !isOffline;
+    setIsOffline(newOfflineState);
+    onlineManager.setOnline(!newOfflineState);
+  };
+
+  // Handle cache clearing
+  const handleClearCache = () => {
+    if (showQueries) {
+      queryClient.getQueryCache().clear();
+      setSelectedQuery(undefined);
+    } else {
+      queryClient.getMutationCache().clear();
+      setSelectedMutation(undefined);
+    }
+  };
+
+  // Notify parent when selection state changes
+  React.useEffect(() => {
+    const hasSelection =
+      selectedQuery !== undefined || selectedMutation !== undefined;
+    onSelectionChange?.(hasSelection);
+  }, [selectedQuery, selectedMutation, onSelectionChange]);
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -28,69 +91,27 @@ export default function DevTools({ setShowDevTools }: Props) {
         </Svg>
       </TouchableOpacity>
       <View style={styles.devToolsPanel}>
-        <View style={styles.devToolsHeader}>
-          <View style={styles.tanstackHeader}>
-            <Text style={styles.tanstackText}>TANSTACK</Text>
-            <View style={styles.reactQueryVersion}>
-              <Text style={styles.reactQueryVersionText}>React Query v5</Text>
-            </View>
-          </View>
-          <View style={styles.toggleButtonsContainer}>
-            <TouchableOpacity
-              onPress={() => {
-                setShowQueries(true);
-              }}
-              style={[
-                styles.toggleButton,
-                showQueries === true
-                  ? styles.toggleButtonActive
-                  : styles.toggleButtonInactive,
-                {
-                  borderTopRightRadius: 0,
-                  borderBottomRightRadius: 0,
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.toggleButtonText,
-                  showQueries === true
-                    ? styles.toggleButtonTextActive
-                    : styles.toggleButtonTextInactive,
-                ]}
-              >
-                Queries
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                setShowQueries(false);
-              }}
-              style={[
-                styles.toggleButton,
-                showQueries === false
-                  ? styles.toggleButtonActive
-                  : styles.toggleButtonInactive,
-                {
-                  borderTopLeftRadius: 0,
-                  borderBottomLeftRadius: 0,
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.toggleButtonText,
-                  showQueries === false
-                    ? styles.toggleButtonTextActive
-                    : styles.toggleButtonTextInactive,
-                ]}
-              >
-                Mutations
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        {showQueries ? <QueriesList /> : <MutationsList />}
+        <DevToolsHeader
+          showQueries={showQueries}
+          setShowQueries={setShowQueries}
+          setShowDevTools={setShowDevTools}
+          onTabChange={handleTabChange}
+          panResponder={panResponder}
+          isOffline={isOffline}
+          onToggleNetwork={handleToggleNetwork}
+          onClearCache={handleClearCache}
+        />
+        {showQueries ? (
+          <QueriesList
+            selectedQuery={selectedQuery}
+            setSelectedQuery={setSelectedQuery}
+          />
+        ) : (
+          <MutationsList
+            selectedMutation={selectedMutation}
+            setSelectedMutation={setSelectedMutation}
+          />
+        )}
       </View>
     </View>
   );
@@ -124,60 +145,6 @@ const styles = StyleSheet.create({
     flex: 1,
     borderTopColor: "#98a2b3",
     borderTopWidth: 1,
-  },
-  devToolsHeader: {
-    padding: 8,
-    paddingBottom: 6,
-    paddingTop: 6,
-    borderColor: "#d0d5dd",
-    borderBottomWidth: 2,
-    paddingVertical: 1,
-    flexDirection: "row",
-  },
-  tanstackHeader: {
-    marginHorizontal: 2,
-    paddingRight: 8,
-  },
-  tanstackText: {
-    color: "#475467",
-    fontWeight: "bold",
-  },
-  reactQueryVersion: {},
-  reactQueryVersionText: {
-    marginTop: -4,
-    color: "#F97F1E",
-  },
-  toggleButtonsContainer: {
-    flexDirection: "row",
-    marginLeft: 1,
-    alignItems: "center",
-  },
-  toggleButton: {
-    borderTopLeftRadius: 4,
-    borderBottomLeftRadius: 4,
-    padding: 4,
-    borderWidth: 1,
-    borderColor: "#d0d5dd",
-    paddingHorizontal: 2,
-    maxWidth: 100,
-    borderRadius: 4,
-  },
-  toggleButtonActive: {
-    backgroundColor: "#F2F4F7",
-  },
-  toggleButtonInactive: {
-    backgroundColor: "#EAECF0",
-  },
-  toggleButtonText: {
-    paddingRight: 4,
-    paddingLeft: 4,
-    fontSize: 12,
-  },
-  toggleButtonTextActive: {
-    color: "#344054",
-  },
-  toggleButtonTextInactive: {
-    color: "#909193",
   },
   comingSoonText: {
     margin: 3,

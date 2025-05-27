@@ -3,37 +3,54 @@ import { Query } from "@tanstack/react-query";
 interface Props {
   query: Query;
 }
+
 export default function triggerLoading({ query }: Props) {
   if (query.state.data === undefined) {
-    // --Undefined - We previously triggered 'trigger loading' actiion--
-    // Retrieve the original query options stored in fetchMeta
-    const previousQueryOptions = (query.state.fetchMeta as any)
-      .__previousQueryOptions;
-    if (previousQueryOptions) {
-      // Refetch the query with the original options
-      query.fetch(previousQueryOptions, {
-        cancelRefetch: true, // This option will cancel the ongoing fetch (if any)
-      });
+    // --ACTION-RESTORE-LOADING logic--
+    // This matches the ACTION-RESTORE-LOADING case from the external sync system
+    const previousState = query.state;
+    const previousOptions = query.state.fetchMeta
+      ? (
+          query.state.fetchMeta as unknown as {
+            __previousQueryOptions: unknown;
+          }
+        ).__previousQueryOptions
+      : null;
+
+    query.cancel({ silent: true });
+    query.setState({
+      ...previousState,
+      fetchStatus: "idle",
+      fetchMeta: null,
+    });
+
+    if (previousOptions) {
+      query.fetch(previousOptions);
     }
   } else {
-    // --Else set query as loading with no data--
+    // --ACTION-TRIGGER-LOADING logic--
+    // This matches the ACTION-TRIGGER-LOADING case from the external sync system
     const __previousQueryOptions = query.options;
 
-    // Modify the query to a never-resolving promise to simulate loading
+    // Trigger a fetch in order to trigger suspense as well.
     query.fetch({
       ...__previousQueryOptions,
-      queryFn: () => new Promise(() => {}),
+      queryFn: () => {
+        return new Promise(() => {
+          // Never resolve - simulates perpetual loading
+        });
+      },
       gcTime: -1,
     });
 
-    // Set the state to pending and remove data
     query.setState({
       data: undefined,
       status: "pending",
       fetchMeta: {
         ...query.state.fetchMeta,
+        // @ts-expect-error This does exist
         __previousQueryOptions,
-      } as any,
+      },
     });
   }
 }

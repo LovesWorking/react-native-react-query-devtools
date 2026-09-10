@@ -31,7 +31,7 @@ Buoy runs three ways, and a key is what moves you up:
 | --- | --- | --- |
 | **No key** | none | Every tool, capped at ~5 entries each — enough to see what they do. |
 | **Free** | `npx buoy login` (no card) | 25 entries per tool, plus Pro free every weekend. |
-| **Pro** | paid key | Unlimited capture, production builds, the MCP server. |
+| **Pro** | paid key | Unlimited capture, production builds, the MCP server, Ask Buoy. |
 
 Every tool is available on every tier — the caps change, the tool list doesn't.
 

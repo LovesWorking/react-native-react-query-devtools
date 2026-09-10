@@ -22,7 +22,7 @@ Buoy is a floating dev menu that ships inside your React Native app — every re
 </div>
 
 - **One component, zero config** — drop in `<FloatingDevTools />` once; install any tool package and it appears in the menu on its own
-- **22 tools, every environment** — network, state, storage, renders, performance and more, in dev, staging, *and* production builds
+- **24 tools, every environment** — network, state, storage, renders, performance and more, in dev, staging, *and* production builds
 - **Your agent can drive it** — Claude or Cursor reads live state, taps real buttons, and benchmarks on a physical device over MCP
 
 ---
@@ -49,21 +49,22 @@ export default function App() {
 That's the whole setup. A floating dev menu appears inside your app.
 
 > [!NOTE]
-> Install any tool package and it auto-appears in the menu. Most tools need zero config — a few take one line, like passing `zustandStores` or calling `watchAtoms()`. Every tool works without a key, at reduced capture. A **free key** (`npx buoy login`, no card) restores the full free tier; [Pro](https://buoy.gg/pricing) unlocks production builds, the MCP server, and unlimited capture.
+> Install any tool package and it auto-appears in the menu. Most tools need zero config — a few take one line, like passing `zustandStores` or calling `watchAtoms()`. Every tool works without a key, at reduced capture. A **free key** (`npx buoy login`, no card) restores the full free tier; [Pro](https://buoy.gg/pricing) unlocks production builds, the MCP server, Ask Buoy, and unlimited capture.
 
 ---
 
-## 🛟 One live session. Three ways in.
+## 🛟 One live session. Four ways in.
 
-Every tool runs inside your app's process. The phone, the desktop, and your agent all see the same session, live.
+Every tool runs inside your app's process. The phone, the desktop, your agent and the in-app chat all see the same session, live.
 
 - **📱 On the phone** — tap the floating menu. Works on any device, no cable, no desktop app, no Metro.
 - **🖥️ On your desktop** — [Buoy Desktop](https://github.com/Buoy-gg/Buoy-Desktop) mirrors the on-device tools to full-screen panels on macOS, Windows & Linux, with a live UI/JS FPS · CPU · memory HUD and remote control of the device.
 - **🤖 Through your agent** — the [Buoy MCP server](https://buoy.gg/buoy/latest/docs/mcp) gives Claude Code, Cursor, or any MCP editor structured tool calls into the running app.
+- **💬 In plain English** — [Ask Buoy](https://buoy.gg/buoy/latest/docs/tools/ask-buoy) *(beta)* puts an AI chat inside the app that drives the same tools for QA, support and product. Your model endpoint, your key; nothing goes through Buoy.
 
 ---
 
-## 🧰 The 22 tools
+## 🧰 The 24 tools
 
 | Tool | Package | What it does |
 | --- | --- | --- |
@@ -71,7 +72,7 @@ Every tool runs inside your app's process. The phone, the desktop, and your agen
 | [Storage](https://buoy.gg/buoy/latest/docs/tools/storage) | `@buoy-gg/storage` | Browse & edit AsyncStorage, MMKV & SecureStore with change history — biometric keys listed, never auto-read |
 | [Time Machine](https://buoy.gg/buoy/latest/docs/tools/time-machine) | `@buoy-gg/time-machine` | Snapshot storage, Redux, Zustand, Jotai & the query cache as restore points — jump back in one tap, or wipe to fresh install |
 | Scenarios *(coming soon)* | `@buoy-gg/scenarios` | Saved one-tap app states for QA & support — override responses, write storage, impersonate & navigate in one step, with an unmissable SIMULATED banner and one-tap undo |
-| Ask Buoy *(beta)* | `@buoy-gg/ask-buoy` | An in-app AI chat that drives every Buoy tool in plain English — your QA types "make checkout fail with a 500" and it happens, on your own model endpoint, with a visible changes bar and real undo |
+| [Ask Buoy](https://buoy.gg/buoy/latest/docs/tools/ask-buoy) *(beta)* | `@buoy-gg/ask-buoy` | An in-app AI chat that drives every Buoy tool in plain English — your QA types "make checkout fail with a 500" and it happens, on your own model endpoint, with a visible changes bar and real undo |
 | [Env](https://buoy.gg/buoy/latest/docs/tools/env) | `@buoy-gg/env` | Auto-discovers `EXPO_PUBLIC_` vars, validates types, scores config health 0–100% |
 | [Query](https://buoy.gg/buoy/latest/docs/tools/react-query) | `@buoy-gg/react-query` | TanStack Query cache — refetch, invalidate, simulate loading & error states, one-tap offline |
 | [Routes](https://buoy.gg/buoy/latest/docs/tools/routes) | `@buoy-gg/route-events` | Navigation events, the live stack, and the full sitemap — jump to any screen |
@@ -201,9 +202,9 @@ how much history each one keeps.
 | --- | --- | --- |
 | **No key** | nothing to do | Every tool, with a short capture window — enough to see what each one does. |
 | **Free** | `npx buoy login` — no card, ~30 seconds | The full free tier: real history across every tool, and Pro free every weekend. |
-| **Pro** | [buoy.gg/pricing](https://buoy.gg/pricing) | Everything: production builds, the MCP server, unlimited capture. |
+| **Pro** | [buoy.gg/pricing](https://buoy.gg/pricing) | Everything: production builds, the MCP server, Ask Buoy, unlimited capture. |
 
-Paid plans unlock production builds, the MCP server, and unlimited capture — **Solo is $9/month ($89/year) for individuals**, and **Business is $45/seat/month** for companies, with priority support and volume pricing. Both come with a 14-day trial.
+Paid plans unlock production builds, the MCP server, Ask Buoy, and unlimited capture — **Solo is $9/month ($89/year) for individuals**, and **Business is $45/seat/month** for companies, with priority support and volume pricing. Both come with a 14-day trial.
 
 Grab your key — free or paid, same command:
 

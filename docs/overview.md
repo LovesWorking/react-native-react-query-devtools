@@ -7,11 +7,12 @@ description: "Meet React Buoy, the in-app devtools platform for React Native —
 
 Buoy is a complete devtools platform for React Native. It turns **hours into seconds** for developers, QA, and product teams on tasks like regression testing, bug reproduction, performance work, and environment validation.
 
-**One devtools engine, three ways to reach your running app:**
+**One devtools engine, four ways to reach your running app:**
 
 - **On your phone** — a zero-config floating menu inside your app, in dev, staging, and production.
 - **On your desktop** — Buoy Desktop, a free dashboard for macOS, Windows & Linux that mirrors your tools with a live performance HUD.
 - **Through your AI** — the [MCP server](./mcp) lets Claude Code, Cursor, or any MCP editor inspect and control your live app (Pro).
+- **In plain English, inside the app** — [Ask Buoy](./tools/ask-buoy), a chat that drives every tool for the people on your team who don't read code (Pro, beta). Your model endpoint, not ours.
 
 Install once. Reach every tool from wherever you work.
 
@@ -70,6 +71,7 @@ This isn't a "nice to have." It's the difference between hours of debugging and 
 
 | Tool | What It Does |
 |------|--------------|
+| **Ask Buoy** *(beta)* | An in-app AI chat that drives every other tool in plain English — on your own model endpoint, with a visible changes bar and real undo |
 | **Network** | See every API call — request, response, timing, errors |
 | **Storage** | Browse and edit AsyncStorage & MMKV in real-time |
 | **Environment** | Validate env vars with type checking and required field validation |
@@ -79,6 +81,7 @@ This isn't a "nice to have." It's the difference between hours of debugging and 
 | **JS Top** | Live Task Manager for the JS thread — see which timers, Promises & callbacks eat your JS FPS |
 | **Images** | Every image load with cache verdict, timing, oversize audit & failure diagnosis |
 | **Assets** | Everything you ship — bundled asset inventory with sizes, duplicates & never-loaded detection |
+| **Time Machine** | Snapshot storage, Redux, Zustand, Jotai & the query cache as restore points — jump back in one tap |
 | **React Query** | Inspect query cache, trigger refetches, simulate offline mode |
 | **Redux DevTools** | Inspect Redux state, actions, and time-travel debugging |
 | **Zustand DevTools** | Monitor Zustand store state, diffs, and changes in real-time |
@@ -88,13 +91,14 @@ This isn't a "nice to have." It's the difference between hours of debugging and 
 | **Render Highlighter** | Spot unnecessary re-renders as they happen |
 | **Impersonate** | Switch user role or impersonate any user to debug their exact state |
 | **TV Remote** | Drive an Apple TV / Android TV D-pad from the desktop, and replay recorded navigation macros |
+| **Focus Inspector** | Track D-pad focus on Apple TV / Android TV and flag focus that sticks, vanishes, or is never reached |
 | **Camera** | Give the iOS Simulator a real camera — your Mac screen, webcam, an image, or a video, in any simulator app |
 | **Image Overlay** | Overlay design mockups on your app for pixel-perfect comparison |
 
 ## Why Buoy
 
 - **Zero config** — Install a package, it appears in the menu. No wiring.
-- **Three ways in** — The same tools on your phone, on your desktop, and through your AI agent.
+- **Four ways in** — The same tools on your phone, on your desktop, through your AI agent, and in the app's own chat.
 - **Works everywhere** — Dev, staging, production. Same tools for everyone.
 - **Modular** — Only install what you need. Each tool is a separate package.
 - **Team-friendly** — Onboard new devs in minutes with consistent debugging.
@@ -125,5 +129,6 @@ Need something specific to your app? Drop in any React component as a custom too
 - [Installation](./installation) — Add Buoy to your project
 - [Quick Start](./quick-start) — Full setup in 2 minutes
 - [AI / MCP Server](./mcp) — Let AI agents drive your running app
+- [Ask Buoy](./tools/ask-buoy) — Put the same power in the chat, for QA, support and product
 - [Custom Tools](./custom-tools) — Build your own debugging tools
 - [Tools Reference](./tools/network) — Detailed docs for each tool

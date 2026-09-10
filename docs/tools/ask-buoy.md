@@ -11,7 +11,7 @@ description: "An in-app AI chat that drives every Buoy tool. Your QA tester type
 
 Your QA tester types *"make the menu request fail with a 500"* and it happens. No ticket, no dev, no knowing what a cart-item object looks like.
 
-Behind the chat, an agent drives the same ~190 tool actions Buoy Desktop and the MCP server use — network overrides, storage writes, cache pokes, impersonation, navigation — and answers in plain English. **The model is yours:** Buoy never holds a key and never proxies a request.
+Behind the chat, an agent drives the same 192 tool actions across 24 tools that Buoy Desktop and the MCP server use — network overrides, storage writes, cache pokes, impersonation, navigation — and answers in plain English. **The model is yours:** Buoy never holds a key and never proxies a request.
 
 <!-- ::ask-buoy-live-demo -->
 
@@ -80,7 +80,7 @@ export default {
 
 ### Teach it your data
 
-Buoy learns your routes, query keys, store names and storage keys by watching the app run. What it can't guess is what they *mean*:
+Buoy learns your routes, query keys, store names and storage keys by watching the app run — and, for Zustand stores, the field names of the items in every list they currently hold. What it can't guess is what any of that *means*:
 
 ```tsx
 context: {
@@ -100,19 +100,22 @@ context: {
 
 Twenty minutes of this, once, is the highest-leverage thing you can give it.
 
-**Why `types` is separate from `notes`.** Ask Buoy prefers reading a live value over anything you declare — runtime truth can't go stale, and the prompt tells it to copy the field names it finds. But *there is nothing to read when the collection is empty*, which is exactly the moment someone asks for the first cart line. The runtime digest can't fill that gap either: it carries key and route **names** only, never values or shapes. So a note saying `item id = 123` gives the model the id and nothing about the object it goes in — it will invent `quantity` where you have `qty`, and your app renders nothing.
+**Why `types` is separate from `notes`.** Ask Buoy prefers an observed shape over anything you declare — runtime truth can't go stale, and the prompt tells it to copy the field names it finds. The digest gives it a head start where it can: for every list a **Zustand** store currently holds, it carries that list's item field names and types, so `lines[]` arrives as `{ lineId: string; itemId: string; qty: number; … }` before the agent reads anything. Values never travel — only names, types and the sketch of a shape. Redux slices and Jotai atoms are reported by name alone, so if that is where your data lives, `types` is the only way the agent learns its shape without reading an instance first.
 
-Declare a shape and that stops. Read wins over declared when both exist, and the agent flags it if they disagree; when neither exists it now says which shape it's unsure of instead of guessing silently.
+But *there is nothing to observe when the collection is empty*, which is exactly the moment someone asks for the first cart line. The digest is honest about that rather than papering over it: an empty list is reported as a list whose shape is **unknown**. A note saying `item id = 123` doesn't fill the gap either — it gives the model the id and nothing about the object it goes in, so it invents `quantity` where you have `qty`, and your app renders nothing.
+
+Declare a shape and that stops. Observed wins over declared when both exist, and the agent flags it if they disagree; when neither exists it says which shape it's unsure of instead of guessing silently. So: `types` for anything the agent may **create** — the first cart line, the first address, the first flag — and let the digest cover the rest.
 
 **Don't write them by hand.** Everything these notes describe is already in your repo. Paste this into Claude Code, Cursor, Codex — any coding agent that can read the project — and have it do the first pass:
 
 ```text
 Read this repo and fill in `context.notes` and `context.types` for Buoy's Ask
 Buoy — an in-app AI agent that reads and writes this app's live state at
-runtime. It already discovers route paths, query keys, and store and storage
-key NAMES on its own, and it reads live values before writing. Your job is
-what those names MEAN, and the SHAPES it cannot read when a collection is
-empty.
+runtime. It already discovers route paths, query keys, store and storage key
+NAMES, plus the item field names of lists held in Zustand stores, and it reads
+live values before writing. Your job is what those names MEAN, and the SHAPES
+it cannot observe — anything in Redux or Jotai, and any collection that is
+currently empty.
 
 Look at: route definitions, React Query key factories, Zustand/Redux/Jotai
 store shapes, AsyncStorage/MMKV key constants, and the TypeScript types behind
@@ -128,13 +131,23 @@ handed to the model as written.
 
 `notes` is one short plain-English fact per string, in this order:
 
-1. What an ambiguous key, field, or store name MEANS in product terms.
-2. Units and formats that apply broadly — cents vs dollars, ISO vs epoch ms,
+1. For each main screen: what it shows and WHERE that data comes from — the
+   React Query key pattern and endpoint, or the store and slice. This is how
+   the agent knows that "change the name on the screen I'm looking at" means
+   the query cache on one screen and a store on another.
+2. Which screen loads the FULL set of something, and which screens load only
+   part of it. Ask Buoy can only read what your app has already fetched, so
+   when someone asks for "all the X" it has to know where all of them are —
+   "the full list of items is on /catalog; the home carousel fetches one card
+   at a time as you swipe". Without this it can still go looking, but with it
+   it goes straight there.
+3. What an ambiguous key, field, or store name MEANS in product terms.
+4. Units and formats that apply broadly — cents vs dollars, ISO vs epoch ms,
    id prefixes.
-3. Enum and status values, quoted exactly as the code spells them, where they
+5. Enum and status values, quoted exactly as the code spells them, where they
    are not already visible in a type above.
-4. Which source is authoritative when two of them hold the same thing.
-5. Any rule a newcomer gets wrong — a field that looks writable but is
+6. Which source is authoritative when two of them hold the same thing.
+7. Any rule a newcomer gets wrong — a field that looks writable but is
    derived, two stores that must stay in sync.
 
 Rules:
@@ -166,27 +179,47 @@ Read what it gives you before shipping it — it is a first draft of the one inp
 
 Reads and ordinary writes run immediately — that's what makes it fast enough to be worth using. What keeps you in control is the bar at the top of the sheet, and that undo is real.
 
-The count is honest in both directions: storage writes are reversible because Buoy reads the old value *before* it writes; a state write with no captured prior value is labelled **permanent** rather than folded into a number Undo can't deliver; and one-shot actions like navigation aren't counted as changes at all. Typing **"undo that"** works too — the agent has its own undo tool wired to the same ledger as the bar.
+The count is honest in both directions: storage writes and query-cache edits are reversible because Buoy reads the old value *before* it writes (a cache edit the app has since refetched is left alone, and Undo says so); a state write with no captured prior value is labelled **permanent** rather than folded into a number Undo can't deliver; and one-shot actions like navigation aren't counted as changes at all. Typing **"undo that"** works too — the agent has its own undo tool wired to the same ledger as the bar.
 
 **Destructive actions wait for a tap.** Wipes and resets show an approval card describing the *effect* — "Clear all saved app data" — not the raw payload. Tune it either way:
 
 ```tsx
 policy: {
   requireApproval: ["write", "destructive"],               // stricter: every change asks
+  requireApprovalFor: [{ toolId: "impersonate" }],         // one tool asks, without gating every write
   allow: [{ effect: "read" }, { toolId: "impersonate" }],  // a scoped support seat
+  deny: [{ toolId: "storage", action: "clearAll" }],       // deny always beats allow
   readOnly: true,                                          // look, never touch
+  secureReads: true,                                       // let it read SecureStore VALUES (off by default)
+  maxSteps: 12,                                            // cap model→tool→model round trips in a turn
 }
 ```
 
-**SecureStore values are off by default** — they're credentials, and they'd travel to your model endpoint. Key *names* are always readable; opt into values with `secureReads: true`.
+`allow` is the shape for a scoped seat: set it and anything matching no rule is refused, instead of enumerating denials across 192 actions.
 
-It also gets out of your way: when it navigates or taps, the sheet drops to a strip for a couple of seconds so you see the app do it. Every finished answer carries a **Copy** button — and so does the header — which puts the whole conversation on the clipboard as plain text, ready for Slack or a ticket.
+The card's long description is collapsed behind **Details**, so the buttons are always reachable — and a card you never answered comes back after a reload, still answerable. Tapping **Allow** then runs the change itself, through the same gate and the same undo ledger.
+
+**Or look without touching.** On a shared or support device, **Settings → Permissions → Read only** refuses every write and simulation until you turn it off — the header says **Read only** while it's on. It adds to whatever the app's `policy` already restricts and never loosens it, it takes effect on the very next call even mid-turn, and Undo still works, because putting things back is the safe direction.
+
+**Or turn the asking off entirely.** On your own dev device, the header's gear opens **Settings → Permissions → Skip approval prompts**: every action then runs the moment the agent calls it, wipes included. It's the "I'm moving fast" switch — it waives the *approval* gates only, so `readOnly`, `deny` and the release-build refusals still hold, and the changes bar still records everything with Undo. It persists across reloads and restarts until you turn it off, and the settings row stays amber while it's on so you can see that it is.
+
+**SecureStore values are off by default** — they're credentials, and they'd travel to your model endpoint. Key *names* are always readable; opt into values with `policy.secureReads: true`.
+
+**You can keep typing while it works.** Anything you send mid-turn is parked in a list above the composer — in order, tap a row to edit it, ✕ to drop it — and sent one at a time as each turn finishes. The list holds, and says why, after an error, after Stop, and while a question or approval is waiting for you: a parked message is a next task, never an answer. **Stop** stops before the next call; anything already in flight finishes and keeps its receipt, every call it skipped shows as "Not run — stopped", and the composer invites you to say what to do instead. **Try again** keeps the stopped attempt above the new one.
+
+**A question it asks you is always tappable.** When the agent needs a decision — your request could mean two things, or it's offering to do something you didn't quite ask for — the answer comes back as buttons, not as a sentence expecting you to type "yes". If it ever asks in prose anyway, Buoy turns that into a card for it. Typing over the card still works; it just stops being the only way.
+
+It also gets out of your way: when it navigates or taps, the sheet drops to a strip for a couple of seconds so you see the app do it. Minimize it and it keeps going — if it then needs a tap, the approval waits and its chip in the minimized dock gets a **!** badge; tap the chip and the card is there. (Closing the sheet still stops the turn.)
+
+**Reading a turn.** Consecutive reads fold into one row — *Looked at Network and Storage · 3 reads* — and every write, failure, refusal and declined call stays its own row. A quiet line under each answer says how long it took and how many actions ran. Long tables say when they're cut and offer **Show all**; code stays as code.
+
+Every finished answer carries **Copy conversation** — and so does the header — which puts the whole conversation, cards included, on the clipboard as plain text. For a bug report, the header's document button asks the agent to **summarize for a ticket**: one card with steps, expected, observed, build, the evidence it actually saw and what's still applied, with anything it inferred kept in its own row — and its own **Copy finding**. Nothing is run or changed to produce it.
 
 **See what it actually did.** The header's gear opens **Settings → Chat → Show agent thinking**. On, every answer grows a collapsed strip — `2 steps · 1 thought · 3.2s · 6210 tokens` — that opens into the model's reasoning and each step it ran, in the order they happened. Tap a step for what it **sent** and what it **returned**.
 
 That last part is the one that finds bugs. A step whose status is `ok` and whose result is `{"ok": false, "error": "no such key"}` looks like a working step until you can see the payload.
 
-**Copy** — the one button under every answer — takes the whole conversation as plain text, and includes the working while this is on:
+**Copy conversation** — the button under every answer — takes the whole conversation as plain text, and includes the working while this is on:
 
 ```text
 You: show my cart
@@ -201,7 +234,17 @@ Off by default, because the answer is what the sheet is for.
 
 Not every model reports reasoning. Claude thinks by default; most OpenAI models return none and the strip then shows the steps alone, which it says rather than looking empty.
 
-**The conversation survives a reload.** Reload the app, restart it, or crash it, and the chat is there when you come back — and so is the agent's memory of it, so "undo that" still means something. A turn the app died in comes back marked interrupted rather than blank. This is what makes the tool bearable while you iterate, and it is the only thing that survives a crash. **New conversation** deletes it.
+**The conversation survives a reload.** Reload the app, restart it, or crash it, and the chat is there when you come back — and so is the agent's memory of it, so "undo that" still means something. A turn the app died in comes back marked interrupted rather than blank, messages you had parked come back as unsent rows, and an approval you never answered comes back as a card that says it predates the restart — **Allow** re-reads what it would change and refuses if that has moved on since. In a very long session the agent's memory is trimmed before the screen is; a quiet line marks the gap when that happens. This is what makes the tool bearable while you iterate, and it is the only thing that survives a crash. **New conversation** deletes it.
+
+---
+
+## Watch it from your desk
+
+If the device is also connected to [Buoy Desktop](../desktop), Ask Buoy shows up there too — as a **read-only mirror**: the conversation as it streams, what the agent has changed and whether each change can be put back, and what the turn has spent in tokens. It's how you follow a tester's session from your own machine without standing over their shoulder.
+
+Two remote verbs are exposed, both in the safe direction: **Undo everything reversible**, and **reset** (which undoes first and refuses to clear if a revert fails, rather than dropping the only record of what is still applied).
+
+There is deliberately **no composer on the desktop**. The broker has no authentication, so a remote "send" would let anyone on the network drive a mutating agent on someone else's phone. Conversations start on the device, with a person.
 
 ---
 
@@ -215,6 +258,55 @@ A release build still reads storage, network, state, routes, console and crashes
 
 ---
 
+## Configuration reference
+
+Everything the `askBuoy` prop takes.
+
+| Option | Default | What it does |
+|---|---|---|
+| `endpoint` | *required* | Where the conversation is POSTed. The only thing Buoy can't invent for you. |
+| `model` | *required* | Model id, passed through to the endpoint. |
+| `protocol` | `"anthropic"` | The wire shape the endpoint speaks — `"anthropic"` or `"openai"`. |
+| `headers` | — | `() => Record<string,string>` (may be async), resolved **before every request** so short-lived tokens work. This is the intended auth story. |
+| `apiKey` | — | A provider key sent straight to the provider. **Dev only** — it is compiled into your bundle in plaintext. |
+| `maxTokens` | `4096` | Ceiling for one response. Raise to at least `8192` on a thinking model: reasoning bills against this same budget. |
+| `anthropicVersion` | — | The `anthropic-version` header. Ignored when `protocol` is `"openai"`. |
+| `requestOverrides` | — | Extra fields merged into every request body, last — `temperature`, a gateway's routing hints, whatever your endpoint demands that this config doesn't model. |
+| `policy` | destructive asks | What the agent may do without asking. See [above](#nothing-it-changes-is-hidden). |
+| `context` | — | `{ notes, types }` — what your data *means* and the shapes of what it may write. The highest-leverage input here. |
+| `appName` | the app name | Shown in the sheet header and given to the model. |
+| `peek` | `true` | When the agent navigates or taps, the sheet drops to a strip for a couple of seconds so the user sees the app do it. Set `false` to keep the sheet fixed. |
+| `persistTranscript` | `true` | Keep the conversation across a reload, restart or crash. `false` keeps it in memory for the session and no longer. |
+| `onEvent` | — | Every engine event as it happens — tool starts and results, blocks, approvals, errors, per-request token usage with prompt-cache counters and the model id the provider actually served. Log agent activity to your own systems, meter cost per seat. Called synchronously on the JS thread: keep it cheap. Throws are swallowed so a logging bug can't take the chat down. |
+| `tools` | — | Descriptors for **your** custom tools, so the agent can drive them too. See below. |
+
+### Let it drive your own tools
+
+A [custom tool](../custom-tools) with a `sync` adapter is already dispatchable as `custom:<id>` — Buoy Desktop and MCP can drive it today. Ask Buoy is different: it only offers what's in its catalog, so without a descriptor your tool is invisible to the chat while staying fully drivable from MCP.
+
+```tsx
+tools: [{
+  toolId: "custom:feature-flags",   // must match the registered id
+  title: "Feature flags",
+  summary: "Read and set this app's feature flags.",
+  actions: [{
+    action: "setFlag",
+    summary: "Turn one feature flag on or off.",
+    params: {
+      type: "object",
+      properties: { name: { type: "string" }, on: { type: "boolean" } },
+      required: ["name", "on"],
+    },
+    effect: "write",     // read | write | destructive — drives the approval gate
+    release: "works",    // works | noop | empty | throws | unknown — anything but "works" is refused in a release build
+  }],
+}]
+```
+
+Your actions then get the same param validation, policy gates and release-build refusals as the built-ins. Write a real `summary` and real param names: a parameter the model isn't shown the name of is a parameter it will guess at.
+
+---
+
 ## Security
 
 - **No credential in the app.** `headers` is a callback you own — no key in the bundle, nothing on disk, nothing on Buoy's sync wire.
@@ -225,9 +317,9 @@ A release build still reads storage, network, state, routes, console and crashes
 
 ### What we send to the model
 
-1. Your message, plus a system prompt with your app's name, your `context.notes`, and a **names-only** digest of the running app — route paths, query keys, store and storage key *names*. Never values.
+1. Your message, plus a system prompt with your app's name, your `context.notes` and `context.types`, and a **values-free** digest of the running app: route paths, store and storage key *names*, the *field names and types* of the items in each Zustand store's lists (a shape sketch, bounded in depth, width and total size — never the records themselves), and a "right now" block re-read before each message with the current route, which query keys are mounted on screen, and the method + URL of the last few requests. Never values, never bodies.
 2. The results of tool calls it makes — state, storage values, response bodies — after the redaction above.
-3. Nothing in the background: the digest is read once when the chat opens, and requests happen only while a turn runs.
+3. Nothing in the background: the digest is read when the chat opens and the "right now" block when you send a message; requests happen only while a turn runs.
 
 The agent reads live app data, and some of that comes from services an attacker may influence. Prompt injection against tool-using agents is a real, unsolved class of attack. Ask Buoy bounds the blast radius — visible banner, real undo, destructive actions behind approval, and a system prompt that treats app data as data — but use `readOnly` or a tighter `requireApproval` against production data.
 

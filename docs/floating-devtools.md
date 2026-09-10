@@ -64,8 +64,9 @@ const FeatureFlagTool = () => (
 function App() {
   return (
     <FloatingDevTools
-      customTools={[
+      apps={[
         {
+          id: "flags",
           name: "Flags",
           component: FeatureFlagTool,
           icon: "🚩",

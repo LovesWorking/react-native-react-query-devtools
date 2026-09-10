@@ -1,19 +1,19 @@
 {
-  "name": "@buoy-gg/ask-buoy",
+  "name": "@buoy-gg/agent-core",
   "version": "7.0.36",
-  "description": "Ask Buoy - an in-app AI chat that drives every Buoy devtool, powered by your own model endpoint",
+  "description": "Headless agent core for Ask Buoy - the tool catalog, BYO-model providers, turn loop and effect ledger that let an LLM drive Buoy devtools",
   "homepage": "https://buoy.gg/tools/ask-buoy",
   "keywords": [
     "react-native",
     "devtools",
     "ai",
-    "chat",
     "agent",
+    "llm",
     "buoy"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Buoy-gg/buoy.git",
-    "directory": "packages/ask-buoy"
+    "directory": "packages/agent-core"
   }
 }

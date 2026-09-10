@@ -88,6 +88,7 @@ iOS will show the Local Network permission prompt on first connect — tap Allow
 - **Multi-device** — Switch between every connected simulator and physical device (RN and Flutter mixed).
 - **Remote actions** — Edit storage, navigate routes, and drive installed tools from your desk.
 - **Screenshot tool** — Capture a region or a specific component from the iOS Simulator (React Native).
+- **[Ask Buoy](./tools/ask-buoy), mirrored** — Follow a tester's in-app AI conversation live from your desk: what it says, what it changed, whether each change can be put back, and what the turn cost in tokens. Read-only, plus remote undo — there is no desktop composer on purpose, because the broker has no authentication.
 - **Built-in troubleshooting** — A "no devices" panel shows your machine's exact URLs with a phone-browser test; the Diagnostics console streams the broker's own connection log (handshakes, disconnect reasons, version mismatches — replayed even if they happened before you opened it); offline devices are removable and age out after a day.
 
 ## How it works

@@ -32,7 +32,7 @@ A floating button appears in the corner of your app. Tap it to open the menu.
 
 Every tool works with no key at all, capped at about five entries each — enough
 to see what they do. A free key raises that to 25 per tool and includes Pro free
-every weekend; Pro unlocks everything: production builds, the MCP server, and
+every weekend; Pro unlocks everything: production builds, the MCP server, Ask Buoy, and
 unlimited capture. See [pricing](https://buoy.gg/pricing).
 
 Grab your key — free or paid, same command:
@@ -143,21 +143,23 @@ Or keep it available for everyone — your QA and support teams will thank you.
 
 ## Take it further
 
-The tools you just installed aren't only in the floating menu — reach the same live app two more ways:
+The tools you just installed aren't only in the floating menu — reach the same live app three more ways:
 
 - **[Buoy Desktop](./desktop)** — mirror every tool to a full dashboard on macOS, Windows, or Linux, with a live performance HUD and multi-device switching.
+- **[Ask Buoy](./tools/ask-buoy)** *(beta)* — an in-app chat that drives every tool you just installed, so QA, support and product can trigger states and read app data without touching a tool or a ticket. Point it at your own model endpoint; Buoy never holds a key.
 - **[AI / MCP Server](./mcp)** — let Claude Code, Cursor, or any MCP editor inspect and control your running app. One command to wire it up:
 
 ```bash
 npx -y @buoy-gg/mcp@latest init
 ```
 
-Buoy Desktop is free to use; the MCP server is a Pro feature. Both talk to your app through one extra package — `npm install @buoy-gg/external-sync` in the app and restart Metro with `--clear` — and from there the connection is automatic, with no URLs to configure (physical devices included).
+Buoy Desktop is free to use; the MCP server and Ask Buoy are Pro features. Desktop and MCP talk to your app through one extra package — `npm install @buoy-gg/external-sync` in the app and restart Metro with `--clear` — and from there the connection is automatic, with no URLs to configure (physical devices included). Ask Buoy needs no broker at all: it runs on the device and talks only to the endpoint you give it.
 
 ## What's next
 
 - [FloatingDevTools](./floating-devtools) — Core component reference
 - [Buoy Desktop](./desktop) — The full desktop dashboard
+- [Ask Buoy](./tools/ask-buoy) — Drive every tool from an in-app chat
 - [AI / MCP Server](./mcp) — Drive your app from your AI editor
 - [Custom Tools](./custom-tools) — Build your own debugging tools
 
@@ -169,7 +171,7 @@ Buoy Desktop is free to use; the MCP server is a Pro feature. Both talk to your 
 
 No — every tool works without one, capped at about five entries each. A free key
 raises that to 25 per tool and includes Pro free every weekend. Pro unlocks
-everything: production builds, the MCP server, and unlimited capture.
+everything: production builds, the MCP server, Ask Buoy, and unlimited capture.
 
 The fastest way to get either is `npx buoy login`. A free key needs no card and
 takes about thirty seconds.
